@@ -4,10 +4,15 @@ import (
 	"api/rest/controllers"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func HandleResquest() { // Função que irá redirecionar para as controllers
-	http.HandleFunc("/", controllers.Home)                                  // Rota principal que irá redirencionar para funçao home da homeController.go
-	http.HandleFunc("/api/personalidades", controllers.TodasPersonalidades) // Rota que irá retorna todas as personalidades
-	log.Fatal(http.ListenAndServe(":8000", nil))                            // Subir um servidor.
+	r := mux.NewRouter()
+
+	r.HandleFunc("/", controllers.Home).Methods("Get")                                  // Rota principal que irá redirencionar para funçao home da homeController.go
+	r.HandleFunc("/api/personalidades", controllers.TodasPersonalidades).Methods("Get") // Rota que irá retorna todas as personalidades
+	r.HandleFunc("/api/personalidades/{id}", controllers.PersonalidadePorId).Methods("Get")
+	log.Fatal(http.ListenAndServe(":8000", r)) // Subir um servidor.
 }
