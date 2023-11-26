@@ -16,6 +16,6 @@ func HandleResquest() { // Função que irá redirecionar para as controllers
 	r.HandleFunc("/api/personalidades/{id}", controllers.PersonalidadePorId).Methods("Get")
 	r.HandleFunc("/api/personalidades/nova", controllers.NovaPersonalidade).Methods("Post")
 	r.HandleFunc("/api/personalidades/deletar/{id}", controllers.DeletarPersonalidade).Methods("Delete")
-	r.HandleFunc("/api/personalidades/atualizar/{id}", controllers.AtualizarPersonalidade)
+	r.HandleFunc("/api/personalidades/atualizar/{id}", controllers.AtualizarPersonalidade).Methods("Put")
 	log.Fatal(http.ListenAndServe(":8000", r)) // Subir um servidor.
 }
