@@ -36,3 +36,39 @@ func PersonalidadePorId(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(personalidade) // retorno objeto json.
 }
+
+func NovaPersonalidade(w http.ResponseWriter, r *http.Request) {
+	var personalidade models.Personalidade         // Crio uma variavel local
+	json.NewDecoder(r.Body).Decode(&personalidade) // Deseralizo os dados do body na variavel local
+	database.DB.Create(&personalidade)             //Depois crio no banco essa personalidade
+	json.NewEncoder(w).Encode(&personalidade)      // Retorno os dados da Personalidade criada
+
+}
+
+func DeletarPersonalidade(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r) // Aqui estou declarando uma variavel que irá obter informações sobre request
+
+	id := vars["id"] // Aqui estou pegando o Id que esta sendo passado no request
+
+	var personalidade models.Personalidade // Crio uma variavel local
+	database.DB.Delete(&personalidade, id)
+	json.NewEncoder(w).Encode(&personalidade)
+
+}
+
+func AtualizarPersonalidade(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r) // Aqui estou declarando uma variavel que irá obter informações sobre request
+
+	id := vars["id"] // Aqui estou pegando o Id que esta sendo passado no request
+
+	var personalidade models.Personalidade // Crio uma variavel local
+
+	database.DB.First(&personalidade, id) // Localizo no banco a personalidade
+
+	json.NewDecoder(r.Body).Decode(&personalidade) // Deserealizo para alterar as dados
+
+	database.DB.Save(&personalidade) // Salvo no banco
+
+	json.NewEncoder(w).Encode(&personalidade) // retorno o que foi salvo
+
+}
